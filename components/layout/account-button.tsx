@@ -1,6 +1,7 @@
 import { auth, signIn, signOut } from "@/auth";
 import React from "react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default async function AccountButton() {
   const session = await auth();
@@ -20,14 +21,26 @@ export default async function AccountButton() {
   } else {
     // DISPLAY SIGN OUT BUTTON
     return (
-      <form
-        action={async () => {
-          "use server";
-          await signOut({ redirectTo: "/" });
-        }}
-      >
-        <Button type="submit">Sign out</Button>
-      </form>
+      <>
+        <p>{session.user.email}</p>
+        <p>{session.user.name}</p>
+        {session.user.image && (
+          <Image
+            src={session.user.image}
+            alt="User avatar"
+            width={50}
+            height={50}
+          />
+        )}
+        <form
+          action={async () => {
+            "use server";
+            await signOut({ redirectTo: "/" });
+          }}
+        >
+          <Button type="submit">Sign out</Button>
+        </form>
+      </>
     );
   }
 }
